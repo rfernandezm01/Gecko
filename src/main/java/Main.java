@@ -7,7 +7,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -17,6 +17,7 @@ import java.util.Scanner;
 public class Main {
 
   public static void main(String[] args) {
+
     //Ponemos scanner y lo necesario para scriptear pero sobretodo lo que hara es poder iniciar firefox sin snap
     Scanner scan = new Scanner(System.in);
     System.out.println(System.getenv("PATH"));
@@ -33,6 +34,19 @@ public class Main {
     // Con driver.get pondremos la Url de la pagina que queremos scriptear y asi cuando ejecutemos el programa se nos abrira esta pagina automaticamente.
     driver.get("https://genshin-impact.fandom.com/es/wiki/Wiki_Genshin_Impact");
     String title = driver.getTitle();
+
+    //Empieza el csv
+    FileWriter webcsv = null;
+    try {
+      webcsv = new FileWriter("paginas.csv", true);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    try {
+      webcsv.write("titulo\n");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 
 // Aqui crearemos una funcion para que a la hora de abrir la pagina esta saca unas cookies entonces esto le clickea automaticamente.
     WebElement acceptButton = driver.findElement(By.className("NN0_TB_DIsNmMHgJWgT7U"));
@@ -70,6 +84,11 @@ public class Main {
           for (WebElement historia : his) {
             System.out.println(historia.getText());
           }
+          try {
+            webcsv.write(driver.getTitle() + "\n");
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
           break;
 
         case 2:
@@ -90,6 +109,11 @@ public class Main {
           for (WebElement historia : his2) {
             System.out.println(historia.getText());
           }
+          try {
+            webcsv.write(driver.getTitle() + "\n");
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
           break;
 
         case 3:
@@ -109,6 +133,11 @@ public class Main {
           for (WebElement historia : his3) {
             System.out.println(historia.getText());
           }
+          try {
+            webcsv.write(driver.getTitle() + "\n");
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
           break;
         // En este caso te permite salir del bucle.
         case 4:
@@ -119,6 +148,11 @@ public class Main {
           System.out.println("Esta opción no esta permitida");
           break;
       }
+    }
+    try {
+      webcsv.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
     driver.close();
   }
